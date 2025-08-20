@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 
 # Your provided function for predicting the Ballon d'Or winner
-def predict_ballon_dor(winners_csv_path, shortlist_csv_path):
+def predict_ballon_dor(ballon_dor_winners_2015_2024, ballon_dor_2025_shortlist):
     """
     Predicts the Ballon d'Or winner based on a scoring model with data validation.
     
@@ -16,8 +16,8 @@ def predict_ballon_dor(winners_csv_path, shortlist_csv_path):
     """
     try:
         # Load the data
-        df_winners = pd.read_csv(winners_csv_path)
-        df_shortlist = pd.read_csv(shortlist_csv_path)
+        df_winners = pd.read_csv(ballon_dor_winners_2015_2024)
+        df_shortlist = pd.read_csv(ballon_dor_2025_shortlist)
     except FileNotFoundError:
         # This error is handled by the Flask route, which will render an error page
         raise FileNotFoundError("The required CSV files were not found.")
