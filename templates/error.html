@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Error</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 2em; background-color: #f8f8f8; color: #333; }
+        .container { max-width: 600px; margin: auto; padding: 2em; background: white; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); text-align: center; }
+        h1 { color: #d9534f; }
+        p { color: #777; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>An Error Occurred!</h1>
+        <p>There was a problem processing your request.</p>
+        <p><strong>Error Details:</strong></p>
+        <p>{{ error_message }}</p>
+        <p>Please make sure all required files are in the correct directory and try again.</p>
+    </div>
+</body>
+</html>
