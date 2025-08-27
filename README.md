@@ -2,7 +2,7 @@
 
 In this repository, I share code on the Ballon d'Or world best player prediction model with Flask Python
 
-# Data Science truck fleet management recommendations system with Flask Python
+# Data Science Ballon d'Or World's best player prediction model with Flask Python
 
 ## Requirements
 * Numpy
