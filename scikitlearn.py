@@ -54,7 +54,7 @@ def index():
     try:
         prediction, shortlist = predict_ballon_dor()
         shortlist_html = shortlist.to_html(classes="table table-striped", index=False)
-        return render_template("index.html", prediction=prediction, shortlist_table=shortlist_html)
+        return render_template("app.html", prediction=prediction, shortlist_table=shortlist_html)
     except Exception as e:
         return f"<h2>Error:</h2><pre>{e}</pre>"
 

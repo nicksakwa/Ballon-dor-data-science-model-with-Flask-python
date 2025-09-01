@@ -1,40 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Ballon d'Or Predictor</title>
-    <!-- Link to external CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h2>Upload Data Files</h2>
-    <form method="POST" enctype="multipart/form-data">
-        <label for="winners">Upload Ballon d'Or Winners CSV (2015–2024):</label>
-        <input type="file" name="winners" required><br>
-
-        <label for="shortlist">Upload Ballon d'Or Shortlist CSV (2025):</label>
-        <input type="file" name="shortlist" required><br>
-
-        <input type="submit" value="Predict Winner">
-    </form>
-
-    {% if prediction %}
-        <h3>Predicted Winner: {{ prediction }}</h3>
-    {% endif %}
-
-    {% if shortlist %}
-        <h3>Candidate Probabilities</h3>
-        <table>
-            <tr>
-                <th>Player</th>
-                <th>Probability</th>
-            </tr>
-            {% for player, prob in shortlist %}
-            <tr>
-                <td>{{ player }}</td>
-                <td>{{ "%.2f"|format(prob * 100) }}%</td>
-            </tr>
-            {% endfor %}
-        </table>
-    {% endif %}
+    <div class="container">
+        <h1>Ballon d'Or 2025 Predictor</h1>
+        <p class="prediction">🏆 Predicted Winner: <strong>{{ prediction }}</strong></p>
+        <h2>Shortlist Data</h2>
+        <div class="table-container">
+            {{ shortlist_table|safe }}
+        </div>
+    </div>
 </body>
 </html>
