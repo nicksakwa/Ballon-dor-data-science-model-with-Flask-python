@@ -99,9 +99,9 @@ def index():
         # Return top 10 predictions
         top10 = shortlist_sorted[['Player','Club','Ballon_dOr_Prob']].head(10).to_dict(orient='records')
         
-        return render_template('index.html', top10=top10)
+        return render_template('app.html', top10=top10)
     
-    return render_template('index.html', top10=None)
+    return render_template('app.html', top10=None)
 
 if __name__ == '__main__':
     app.run(debug=True)

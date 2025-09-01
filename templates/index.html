@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Ballon d'Or 2025 Prediction</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 2em; }
+        h1 { color: #333; }
+        h2 { color: #666; }
+        table { width: 100%; border-collapse: collapse; margin-top: 1em; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <h1>Ballon d'Or 2025 Prediction Model</h1>
+    <p>Based on your data and scoring criteria, the predicted winner is:</p>
+    <h2>🏆 {{ predicted_winner }} 🏆</h2>
+    
+    <h3>Full Prediction Table</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Player</th>
+                <th>Club</th>
+                <th>Trophies</th>
+                <th>Awards</th>
+                <th>Avg. Rating</th>
+                <th>Final Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in predictions %}
+            <tr>
+                <td>{{ row['Player'] }}</td>
+                <td>{{ row['Club'] }}</td>
+                <td>{{ row['Num_Trophies'] }}</td>
+                <td>{{ row['Num_Awards'] }}</td>
+                <td>{{ row['Avg. Rating'] }}</td>
+                <td>{{ '%.2f' | format(row['Final_Score']) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
