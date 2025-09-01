@@ -6,8 +6,8 @@ from sklearn.linear_model import LogisticRegression
 app = Flask(__name__)
 
 # Load CSVs directly (make sure these files are in the same folder as app.py)
-winners_df = pd.read_csv("ballondorwinners.csv")
-shortlist_df = pd.read_csv("ballondorshortlist.csv")
+winners_df = pd.read_csv("ballon_dor_winners_2015-2024.csv")
+shortlist_df = pd.read_csv("ballon_dor_2025_shortlist.csv")
 
 # Normalize column names to avoid KeyError issues
 winners_df.columns = winners_df.columns.str.strip()
