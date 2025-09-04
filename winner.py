@@ -1,61 +1,48 @@
-from flask import Flask, render_template
+from flask import Flask ,render_template
 import pandas as pd
 import numpy as np
 import traceback
 import os
 
 app = Flask(__name__)
-
 UPLOADS = os.path.join(os.path.dirname(__file__), "uploads")
 WINNERS_CSV = os.path.join(UPLOADS, "ballon_dor_winners_2015_2024.csv")
 SHORTLIST_CSV = os.path.join(UPLOADS, "ballon_dor_2025_shortlist.csv")
-
 
 def count_items(text, delimiter=','):
     if pd.isna(text):
         return 0
     s = str(text).strip()
-    if s in ['', '—', '-', 'None', 'nan']:
+    if s in ['', '-', '-', 'None', 'nan']:
         return 0
-    parts = [p.strip() for p in s.replace(';', ',').split(',') if p.strip()]
+    parts = [p.strip() for p in s.replace(',', ',').split(',') if p.strip()]
     return len(parts)
 
-
-def find_column(df, candidates):
-    """
-    Find a column name in df using a list of candidate names. Matching is case-insensitive.
-    Returns the actual column name from df or None.
-    """
+def find_column(df , candidates):
     if df is None:
         return None
-    # map lowercased column -> actual column
-    col_map = {str(c).lower().strip(): c for c in df.columns}
+    col_map = {str(c).lower(): c for c in df.columns}
     for cand in candidates:
         key = str(cand).lower().strip()
         if key in col_map:
             return col_map[key]
-    # fallback: partial substring match
     for cand in candidates:
         key = str(cand).lower().strip()
-        for col in df.columns:
-            if key in str(col).lower():
-                return col
-    return None
-
+        if key in str(col).lower():
+                return col_map[key]
+        return None
 
 def load_and_prepare():
-    # Load CSVs
     try:
-        winners_df = pd.read_csv(WINNERS_CSV, skipinitialspace=True, encoding='utf-8')
-        shortlist_df = pd.read_csv(SHORTLIST_CSV, skipinitialspace=True, encoding='utf-8')
+        winner_df = pd.read_csv(WINNERS_CSV, skipinitialspace=True , encoding='utf-8')
+        shortlist_df = pd.read_csv(SHORTLIST_CSV, skipinitialspace=True , encoding='utf-8')
+        return winner_df, shortlist_df
     except Exception as e:
         raise FileNotFoundError(f"Unable to load CSV files from '{UPLOADS}': {e}")
-
-    # Normalize column names
-    winners_df.columns = winners_df.columns.astype(str).str.strip()
+    
+    winner_df.columns = winner_df.columns.astype(str).str.strip()
     shortlist_df.columns = shortlist_df.columns.astype(str).str.strip()
-
-    # Candidate header names (add more if your CSVs use different names)
+    
     avg_candidates = ['Avg. Rating', 'Average Rating', 'Avg Rating', 'Avg_Rating', 'Avg Rating (2024–25)', 'Rating']
     trophies_candidates = [
         'Major Club Trophies', 'Major Trophies (2024–25)', 'Major Trophies',
@@ -67,8 +54,7 @@ def load_and_prepare():
     ]
     club_candidates = ['Club', 'Team', 'Club (league)', 'Club (team)']
     player_candidates = ['Player', 'Name', 'Full name', 'Full Name', 'Player Name', 'player', 'name']
-
-    # Find columns in each dataframe
+    
     avg_col_short = find_column(shortlist_df, avg_candidates)
     avg_col_win = find_column(winners_df, avg_candidates)
 
@@ -84,7 +70,6 @@ def load_and_prepare():
     player_col_short = find_column(shortlist_df, player_candidates)
     player_col_win = find_column(winners_df, player_candidates)
 
-    # Work on a shortlist copy (this is what we will score and display)
     df = shortlist_df.copy()
 
     # Map player column to 'Player' for template-consistency
@@ -97,7 +82,6 @@ def load_and_prepare():
     else:
         df['Player'] = np.nan
 
-    # Avg rating -> numeric (only if present on shortlist)
     if avg_col_short:
         df['Avg_Rating'] = pd.to_numeric(df[avg_col_short], errors='coerce')
         avg_source = 'shortlist'
@@ -160,7 +144,6 @@ def load_and_prepare():
 
     return winners_df, df, detected
 
-
 def compute_scores(shortlist_df, detected, top5_only=False):
     TROPHY_BONUS = 2.0
     AWARDS_BONUS = 1.5
@@ -181,7 +164,6 @@ def compute_scores(shortlist_df, detected, top5_only=False):
 
     df_sorted = df.sort_values(by='Final_Score', ascending=False).reset_index(drop=True)
     return df_sorted
-
 
 @app.route("/")
 def index():
