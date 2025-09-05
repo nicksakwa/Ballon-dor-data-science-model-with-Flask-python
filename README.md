@@ -9,14 +9,13 @@ In this repository, I share code on the Ballon d'Or world best player prediction
 * Python
 * Pandas
 * Flask Framework
-* scikit-learn
+* Traceback
 
 Pandas is a  core library used for reading, analyzing, cleaning, and visualizing data from CSV files, Excel sheets, JSON data, and SQL databases.
 
 * **Reading Data:** Loads data from dataset formats such as CSV files, Excel sheets, JSON data, and SQL databases.
 * **Analyzing Data:** Generating insights.
 * **Cleaning Data:** Dealing with missing rows and columns from data, duplicates, inconsistencies, and other errors.
-* **Visualizing Data:** Generating charts and graphs from Data.
 
 ## Before diving into this repository, ensure you have the following installed:
 
@@ -25,9 +24,9 @@ Pandas is a  core library used for reading, analyzing, cleaning, and visualizing
     ```bash
     pip install pandas numpy Flask
     ```
-3.  **scikit-learn** Install the library using pip in your bash terminal or your directory:
+3.  **Traceback** Install the library using pip in your bash terminal or your directory:
     ```bash
-    pip install scikit-learn
+    pip install traceback
     ```
 
 ## Running the App
