@@ -1,3 +1,4 @@
+# ...existing code...
 from flask import Flask, render_template
 import pandas as pd
 import numpy as np
@@ -9,7 +10,6 @@ app = Flask(__name__)
 UPLOADS = os.path.join(os.path.dirname(__file__), "uploads")
 WINNERS_CSV = os.path.join(UPLOADS, "ballon_dor_winners_2015_2024.csv")
 SHORTLIST_CSV = os.path.join(UPLOADS, "ballon_dor_2025_shortlist.csv")
-
 
 def count_items(text, delimiter=','):
     if pd.isna(text):
@@ -103,6 +103,7 @@ def load_and_prepare():
         avg_source = 'shortlist'
         avg_col_used = avg_col_short
     else:
+        # no avg rating on shortlist; keep column but NaN so compute_scores will detect absence
         df['Avg_Rating'] = np.nan
         avg_source = 'winners' if avg_col_win else None
         avg_col_used = avg_col_win
@@ -207,13 +208,26 @@ def index():
         elif 'Club' not in df_pred.columns:
             df_pred['Club'] = np.nan
 
-        # Columns to display (only include existing ones)
-        display_cols = [c for c in ['Player', 'Club', 'Num_Trophies', 'Num_Awards', 'Avg_Rating', 'Final_Score'] if c in df_pred.columns]
+        # Ensure Avg_Rating is available under the human-friendly name "Avg. Rating"
+        # Prefer 'Avg. Rating' for display in the template.
+        if 'Avg_Rating' in df_pred.columns and 'Avg. Rating' not in df_pred.columns:
+            # round to 2 decimals and keep NaN as blank string for the template
+            df_pred['Avg. Rating'] = df_pred['Avg_Rating'].round(2)
+        elif 'Avg. Rating' in df_pred.columns and 'Avg_Rating' not in df_pred.columns:
+            df_pred['Avg_Rating'] = pd.to_numeric(df_pred['Avg. Rating'], errors='coerce')
+
+        # Format Avg. Rating for display: convert NaN to empty string and keep two decimals
+        if 'Avg. Rating' in df_pred.columns:
+            df_pred['Avg. Rating'] = df_pred['Avg. Rating'].apply(lambda x: "" if pd.isna(x) else f"{float(x):.2f}")
+
+        # Columns to display (prefer 'Avg. Rating')
+        candidate_order = ['Player', 'Club', 'Num_Trophies', 'Num_Awards', 'Avg. Rating', 'Final_Score']
+        display_cols = [c for c in candidate_order if c in df_pred.columns]
 
         predictions_list = df_pred[display_cols].to_dict('records')
         predicted_winner = df_pred.iloc[0]['Player'] if 'Player' in df_pred.columns and not df_pred['Player'].isna().all() else "No clear winner"
 
-        # Render index.html (adjust template name if your project uses a different template)
+        # Render index.html
         return render_template("index.html", predictions=predictions_list, predicted_winner=predicted_winner, detected=detected)
     except Exception as e:
         tb = traceback.format_exc()
