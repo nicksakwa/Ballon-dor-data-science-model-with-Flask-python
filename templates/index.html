@@ -13,8 +13,11 @@
 <body>
     <h1>Ballon d'Or 2025 Prediction Model</h1>
     <p>Based on your data and scoring criteria, the predicted winner is:</p>
-    <h2>🏆 {{ predicted_winner }} 🏆</h2>
-    
+    {% if predicted_winner %}
+        <h2>🏆 {{ predicted_winner['Player'] }} ({{ predicted_winner['Club'] }}) 🏆</h2>
+    {% else %}
+        <h2>No prediction available</h2>
+    {% endif %}
     <h3>Full Prediction Table</h3>
     <table>
         <thead>
@@ -34,8 +37,8 @@
                 <td>{{ row['Club'] }}</td>
                 <td>{{ row['Num_Trophies'] }}</td>
                 <td>{{ row['Num_Awards'] }}</td>
-                <td>{{ row['Avg. Rating'] }}</td>
-                <td>{{ '%.2f' | format(row['Final_Score']) }}</td>
+                <td>{{ row['Avg_Rating'] }}</td>
+                <td>{{ row['Final_Score'] }}</td>
             </tr>
             {% endfor %}
         </tbody>
